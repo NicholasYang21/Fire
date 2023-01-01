@@ -77,8 +77,47 @@ pub enum TokenKind {
     LeftBrace,
     /// symbol '}'.
     RightBrace,
-    /// an identifier like `abc` or `abc_foo_123`
+    /// an identifier like `abc` or `abc_foo_123`.
+    ///
     /// the lexer will **not** check whether the identifier is **valid**.
     Identifier,
-    // todo: numbers, strings, raw strings, characters
+    /// An integer.
+    ///
+    /// ### Representation
+    /// ```text
+    /// // without prefixes and suffixes
+    /// 1234567
+    /// 123_456_789 // You can insert underscores between the digits to split them.
+    ///
+    /// // with prefixes
+    /// 0x7_FFF_FFF
+    /// 0o777777
+    /// 0b1110_0100_1011_0110
+    ///
+    /// // with suffixes
+    /// 0x7_FFF_FFF_i32 // the suffix of this number is `i32 (int32)`,
+    /// 0o777777_u64    // it can annotate the type of the integer.
+    /// ```
+    Integer(NumBase)
+}
+
+/// The enumerate described the base of an integer in Fire.
+#[derive(Ord, PartialOrd, Eq, PartialEq, Debug)]
+pub enum NumBase {
+    /// Binary numbers.
+    ///
+    /// for example: `0b101101`, `0b10010`.
+    Bin,
+    /// Octal numbers.
+    ///
+    /// for example: `0o1234567`, `0o123321`.
+    Oct,
+    /// Decimal numbers.
+    ///
+    /// for example: `1234567890`, `114514`.
+    Dec,
+    /// Hexadecimal numbers.
+    ///
+    /// for example: `0x7ffffff`, `0xffc66d`.
+    Hex,
 }
